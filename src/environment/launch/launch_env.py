@@ -14,5 +14,11 @@ def generate_launch_description():
             executable='car',
             name='car',
             output='screen'
+        ),
+        Node(
+            package='controller_car',
+            executable='controller_car',
+            name='controller_car',
+            output='screen'
         )
     ])

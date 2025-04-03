@@ -80,7 +80,7 @@ def main(args=None):
     node = Car()
     try:
         rclpy.spin(node)
-    except keyboardinterrupt:
+    except KeyboardInterrupt:
         pass
     finally:
         node.destroy_node()
