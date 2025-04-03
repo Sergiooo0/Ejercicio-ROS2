@@ -3,6 +3,7 @@ from rclpy.node import Node
 from std_msgs.msg import Float32
 from geometry_msgs.msg import Point
 from auria_msgs.msg import PointArray
+import numpy as np
 
 class ControllerCar(Node):
     HZ = 10  # Frecuencia en hercios
@@ -12,8 +13,8 @@ class ControllerCar(Node):
         self.logger = self.get_logger()
         self.logger.info('Nodo creado')
 
-        self.cones_blue = PointArray()
-        self.cones_yellow = PointArray()
+        self.cones_blue = []
+        self.cones_yellow = []
 
         self.publisher = self.create_publisher(Float32, "/car/acceleration", self.HZ)
         self.subscription = self.create_subscription(PointArray, '/vision/nearby_cones/blue', self.save_cones_blue, 10)
@@ -28,13 +29,17 @@ class ControllerCar(Node):
 
     def save_cones_blue(self, msg):
         self.cones_blue = []
-        for point in msg.points:
-            self.cones_blue.points.append(point)
+        self.cones_blue.extend(msg.points)
+        self.logger.info(f"Conos blue: {self.cones_blue}")
     
     def save_cones_yellow(self, msg):
         self.cones_yellow = []
-        for point in msg.points:
-            self.cones_yellow.points.append(point)
+        self.cones_yellow.extend(msg.points)
+
+    def update(self):
+        if self.cones_blue.points == [] or self.cones_yellow.points == []:
+            self.logger.warn("No hay conos en el sensor")
+            return
 
 def main(args=None):
     rclpy.init(args=args)
