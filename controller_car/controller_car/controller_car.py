@@ -14,7 +14,7 @@ class ControllerCar(Node):
         super().__init__('nodo')
         self.log = log
         self.logger = self.get_logger()
-        self.logger.info('Nodo creado')
+        self.logger.info('Nodo controlador de coche creado')
 
         # Dos columnas: x, y
         self.cones_blue = np.empty((0, 2))
@@ -58,7 +58,6 @@ class ControllerCar(Node):
             return
         # Comprobamos si tenemos información suficiente
         if not self.check_information():
-            self.logger.info("No hay información suficiente para calcular la dirección")
             return
 
         # Tomamos los conos más cercanos (el primero por simplicidad)
@@ -106,8 +105,6 @@ class ControllerCar(Node):
         
     def update_car_position(self, msg):
         self.car_position = msg
-        if self.log:
-            self.logger.info(f"Car position: {self.car_position}")
     
     def update_car_yaw(self, msg):
         self.car_yaw = msg.data
